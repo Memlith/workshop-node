@@ -30,6 +30,7 @@ export default class AuthController {
     }
     static async login(req: Request, res: Response) {
         const { email, password } = req.body
+
         if (!email) return res.status(400).json({ error: 'Email is required' })
         if (!password) return res.status(400).json({ error: 'Password is required' })
 
@@ -52,6 +53,8 @@ export default class AuthController {
         token.user = user
         await token.save()
 
+        // Aqui estamos definindo o cookie como HTTP Only, Secure e SameSite None
+        res.cookie('token', token.token, { httpOnly: true, secure: true, sameSite: 'none' })
         return res.json({
             token: token.token,
             expiresAt: token.expiresAt,
@@ -79,6 +82,7 @@ export default class AuthController {
         token.expiresAt = token.expiresAt = new Date(Date.now() + 60 * 60 * 1000)
         await token.save()
 
+        res.cookie('token', token.token, { httpOnly: true, secure: true, sameSite: 'none' })
         return res.json({
             token: token.token,
             expiresAt: token.expiresAt,
@@ -96,6 +100,9 @@ export default class AuthController {
 
         // remove o token
         await userToken.remove()
+
+        //remove o token do cookie
+        res.clearCookie('token')
 
         //retorna uma resposta vazia
         return res.status(204).json()

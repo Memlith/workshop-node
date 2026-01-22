@@ -2,11 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import Token from "../models/token.entity";
 
 export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
-    const { authorization } = req.params
-    if (!authorization) return res.status(401).json({ error: 'Token is required' })
+    //   const { authorization } = req.params
+    //   if (!authorization) return res.status(401).json({ error: 'Token is required' })
+
+    const { token } = req.cookies
+    if (!token) return res.status(401).json({ error: 'Token is required' })
 
     // verifica se token existe
-    const userToken = await Token.findOneBy({ token: authorization })
+    const userToken = await Token.findOneBy({ token })
     if (!userToken) return res.status(401).json({ error: 'Invalid token' })
 
     //verifica se token expirou
