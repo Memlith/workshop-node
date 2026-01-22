@@ -51,12 +51,12 @@ export default class TaskController {
         const { id } = req.params
         const { title, completed } = req.body
         if (!id || isNaN(Number(id))) {
-            return res.status(400).json({ error: 'O id é obrigatório' })
+            return res.status(400).json({ error: 'ID is required' })
         }
 
         const task = await Task.findOneBy({ id: Number(id) })
         if (!task) {
-            return res.status(404).json({ error: 'Task não encontrada' })
+            return res.status(404).json({ error: 'Task not found' })
         }
 
         task.title = title || task.title
