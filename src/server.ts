@@ -15,7 +15,7 @@ app.use(express.json) // habilita o express para receber dados no formato json
 app.use(routes) //habilita rotas
 //app.use(cors()) // habilita o CORS
 app.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://mynodeapp.com'],
     credentials: true // habilita os cookies
 }))
 app.use(cookieParser())
